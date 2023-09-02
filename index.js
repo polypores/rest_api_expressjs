@@ -1,9 +1,13 @@
 const Joi = require('joi')
+// object schema validation
+
 const express = require('express')
 require('dotenv').config()
+
 const mysql = require('mysql2')
 
 const app = express()
+
 const db = mysql.createConnection({
 	host: process.env.DB_HOST,
 	user: process.env.DB_USERNAME,
@@ -21,22 +25,22 @@ db.connect((err) => {
 	console.log('mysql connected')
 })
 
-app.get('/api/book/insert', function (req, res) {
-	let to_insert_json = {
+app.get('/book/insert', function (req, res) {
+	let bookInfo = {
 		"id": 6,
 		"name": "Tây Du Ký",
 		"year": 2010,
 		"price": 10000
 	}
 	let sql = "INSERT INTO book SET ?"
-	let query = db.query(sql, to_insert_json, (err, result) => {
+	let query = db.query(sql, bookInfo, (err, result) => {
 		if (err) throw err
 		console.log(result)
 		res.send("Db đã được update")
 	})
 })
 
-app.get('/api/book/search', function (req, res) {
+app.get('/book/search', function (req, res) {
 	let error_banner = 'Please enter the parameters'
 	let id = req.query.id
 	if (id === undefined) {
